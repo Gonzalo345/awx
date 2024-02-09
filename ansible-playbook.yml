@@ -1,24 +1,8 @@
 ---
-- name: Verificar si Docker está instalado y tiene disco montado en /var/lib/docker
+- name: Ping
   hosts: all 
   become: true
 
   tasks:
-    - name: Comprobar si Docker está instalado
-      command: docker --version
-      ignore_errors: yes
-      register: docker_output
-
-    - name: Imprimir resultado de Docker
-      debug:
-        msg: "Docker está instalado en {{ inventory_hostname }}"
-      when: "'Docker' in docker_output.stdout_lines[0]"
-
-    - name: Verificar si /var/lib/docker está montado en un disco
-      shell: df -h /var/lib/docker | awk 'NR==2{print $1}'
-      register: docker_mounted_disk
-
-    - name: Imprimir resultado de la verificación del disco
-      debug:
-        msg: "/var/lib/docker está montado en {{ docker_mounted_disk.stdout }} en {{ inventory_hostname }}"
-      when: docker_mounted_disk.stdout is not none
+    - name: "Ping hosts"
+      ping:
